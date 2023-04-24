@@ -10,14 +10,15 @@ import {
     Input,
     InputGroup,
     InputRightElement,
+    Spinner,
     Text,
 } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons";
-import ReactInputMask from "react-input-mask";
 
 function SignUp() {
     const [showPasswordBtn, setShowPasswordBtn] = useState(false);
     const [showPassword, setShowPassword] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     return (
         <Box
             sx={{
@@ -74,8 +75,8 @@ function SignUp() {
                         <Input
                             type="text"
                             id="name"
-                            name="name"
-                            placeholder="Foydalanuvchining ismi"
+                            name="first_name"
+                            placeholder="Misol: Biloliddin"
                         />
                         <InputRightElement>
                             <CheckIcon color="green.500" fontSize="sm" />
@@ -88,9 +89,9 @@ function SignUp() {
                     <InputGroup marginTop="-10px">
                         <Input
                             type="text"
-                            name="surname"
+                            name="last_name"
                             id="surname"
-                            placeholder="Foydalanuvchining familiyasi"
+                            placeholder="Misol: Tursunov"
                         />
                         <InputRightElement>
                             <CheckIcon color="green.500" fontSize="sm" />
@@ -105,7 +106,7 @@ function SignUp() {
                             type="text"
                             name="username"
                             id="username"
-                            placeholder="Foydalanuvchining nomi"
+                            placeholder="Misol: biloliddin.tursunov"
                         />
                         <InputRightElement>
                             <CheckIcon color="green.500" fontSize="sm" />
@@ -120,7 +121,7 @@ function SignUp() {
                             type={showPassword ? "password" : "text"}
                             name="password"
                             id="password"
-                            placeholder="Foydalanuvchining paroli"
+                            placeholder="Misol: Biloliddin9979"
                         />
                         <InputRightElement>
                             {showPasswordBtn && (
@@ -147,23 +148,42 @@ function SignUp() {
                         </InputRightElement>
                     </InputGroup>
 
-                    <FormLabel htmlFor="telNumber">
+                    <FormLabel htmlFor="phone_number">
                         Foydalanuvchining telefon raqami
                     </FormLabel>
                     <InputGroup marginTop="-10px">
                         <Input
-                            as={ReactInputMask}
-                            mask="+*** ** ***-**-**"
-                            maskChar={null}
                             type="text"
-                            name="telNumber"
-                            id="telNumber"
-                            placeholder="Foydalanuvchining telefon raqami"
+                            name="phone_number"
+                            id="phone_number"
+                            placeholder="Misol: +999 88 209 99 79"
                         />
                         <InputRightElement>
                             <CheckIcon color="green.500" fontSize="sm" />
                         </InputRightElement>
                     </InputGroup>
+
+                    <FormLabel htmlFor="address">
+                        Foydalanuvchining Yashash Manzili
+                    </FormLabel>
+                    <InputGroup marginTop="-10px">
+                        <Input
+                            type="text"
+                            name="address"
+                            id="address"
+                            placeholder="Misol: Yozyovon Xonobod"
+                        />
+                        <InputRightElement>
+                            <CheckIcon color="green.500" fontSize="sm" />
+                        </InputRightElement>
+                    </InputGroup>
+                    <Button
+                        marginTop="10px"
+                        colorScheme="blue"
+                        onClick={() => setIsLoading(!isLoading)}
+                    >
+                        {isLoading ? <Spinner /> : "Yangi hisob ochish"}
+                    </Button>
                 </FormControl>
             </Card>
         </Box>
