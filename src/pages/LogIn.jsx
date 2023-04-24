@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -17,6 +17,7 @@ import { CheckIcon } from "@chakra-ui/icons";
 function Login() {
   const [showPasswordBtn, setShowPasswordBtn] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -107,7 +108,7 @@ function Login() {
           </InputGroup>
           <Button colorScheme='blue' sx={{
             marginTop:"15px"
-          }}>Kirish</Button>
+          }} onClick={() => navigate('/select-store')}>Kirish</Button>
         </FormControl>
       </Card>
     </Box>

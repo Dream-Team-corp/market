@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Admin, LogIn, Seller, SignUp } from "./pages";
+import { Admin, LogIn, SelectStore, Seller, SignUp } from "./pages";
 import { Spinner } from "@chakra-ui/react";
 
 const router = createBrowserRouter([
@@ -18,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/seller",
     element: <Seller />,
+  },
+  {
+    path: "/select-store",
+    element: <SelectStore />,
   },
 ]);
 function App() {
