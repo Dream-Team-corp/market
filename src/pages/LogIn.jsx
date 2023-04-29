@@ -1,23 +1,26 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {useLogInStore} from "../store/";
 import {
     Box,
     Button,
     Card,
     FormControl,
     FormLabel,
+    IconButton,
     Image,
     Input,
     InputGroup,
-    InputRightElement,
+    InputRightElement, Spinner,
     Text,
 } from "@chakra-ui/react";
-import { CheckIcon } from "@chakra-ui/icons";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 function Login() {
-    const [showPasswordBtn, setShowPasswordBtn] = useState(false);
     const [showPassword, setShowPassword] = useState(true);
-    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { setValue, sendData, resData } = useLogInStore((state) => state);
     return (
         <Box
             sx={{
@@ -29,7 +32,7 @@ function Login() {
         >
             <Card
                 sx={{
-                    width: "450px",
+                    width: "400px",
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
@@ -72,60 +75,49 @@ function Login() {
                     <FormLabel htmlFor="username">
                         Foydalanuvchining nomi
                     </FormLabel>
-                    <InputGroup marginTop="-10px">
-                        <Input
-                            type="text"
-                            name="username"
-                            id="username"
-                            placeholder="Foydalanuvchining nomi"
-                        />
-                        <InputRightElement>
-                            <CheckIcon color="green.500" fontSize="sm" />
-                        </InputRightElement>
-                    </InputGroup>
+                    <Input
+                        onChange={(e) => setValue({ username: e.target.value })}
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Foydalanuvchining nomi"
+                    />
 
                     <FormLabel htmlFor="password">
                         Foydalanuvchining paroli
                     </FormLabel>
-                    <InputGroup marginTop="-10px">
+                    <InputGroup>
                         <Input
+                            onChange={(e) =>
+                                setValue({ password: e.target.value })
+                            }
                             type={showPassword ? "password" : "text"}
                             name="password"
                             id="password"
                             placeholder="Foydalanuvchining paroli"
                         />
                         <InputRightElement>
-                            {showPasswordBtn && (
-                                <Button
-                                    h="1.75rem"
-                                    size="sm"
-                                    onMouseLeave={() =>
-                                        setShowPasswordBtn(false)
-                                    }
-                                    onClick={() =>
-                                        setShowPassword(!showPassword)
-                                    }
-                                >
-                                    show
-                                </Button>
-                            )}
-                            {!showPasswordBtn && (
-                                <CheckIcon
-                                    color="green.500"
-                                    fontSize="sm"
-                                    onMouseMove={() => setShowPasswordBtn(true)}
-                                />
-                            )}
+                            <IconButton
+                                onClick={() => setShowPassword(!showPassword)}
+                                size="sm"
+                                aria-label="show password button"
+                            >
+                                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                            </IconButton>
                         </InputRightElement>
                     </InputGroup>
+
                     <Button
                         colorScheme="blue"
                         sx={{
                             marginTop: "15px",
                         }}
-                        onClick={() => navigate("/select-store")}
+                        onClick={() => {
+                            setIsLoading(resData.token);
+                            sendData();
+                        }}
                     >
-                        Kirish
+                        {isLoading ? <Spinner /> : "Kirish"}
                     </Button>
                 </FormControl>
             </Card>

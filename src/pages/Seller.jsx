@@ -1,5 +1,5 @@
 function Seller() {
-    return <>admin</>;
+    return <>Seller</>;
 }
 
 export default Seller;

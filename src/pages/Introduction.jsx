@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import {useNavigate} from "react-router-dom";
+import {useEffect} from "react";
 
-function Admin() {
+function Introduction () {
     const navigate = useNavigate();
     useEffect(() => {
         if (localStorage.token) {
@@ -14,7 +14,7 @@ function Admin() {
             navigate("/login")
         }
     }, [navigate]);
-    return <h1>lorem</h1>;
+    return <></>
 }
 
-export default Admin;
+export default Introduction

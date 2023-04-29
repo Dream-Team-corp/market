@@ -1,0 +1,25 @@
+import axios from "axios";
+import { create } from "zustand";
+export const useSignUpStore = create((set, get) => ({
+    userData: {
+        first_name: "",
+        last_name: "",
+        username: "",
+        password: "",
+        phone_number: "",
+        address: "",
+    },
+    resData: {},
+    setValue: (value) =>
+        set((state) => ({ userData: { ...state.userData, ...value } })),
+    sendData: async () => {
+        const res = await axios.post(
+            "https://market-api.vodiy-yulduzlari.com/auth",
+            get().userData,
+            {
+                headers: { "Content-Type": "application/json" },
+            }
+        );
+        set({ resData: res.data });
+    },
+}));

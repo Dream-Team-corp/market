@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import {
     Box,
     Button,
     Card,
     FormControl,
     FormLabel,
+    IconButton,
     Image,
     Input,
     InputGroup,
@@ -13,12 +14,24 @@ import {
     Spinner,
     Text,
 } from "@chakra-ui/react";
-import { CheckIcon } from "@chakra-ui/icons";
+import { useSignUpStore } from "../store/index.js";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
 function SignUp() {
-    const [showPasswordBtn, setShowPasswordBtn] = useState(false);
     const [showPassword, setShowPassword] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+
+    const { setValue, sendData, resData } = useSignUpStore((state) => state);
+    if (resData.token && resData.user_data) {
+        localStorage.setItem("token", resData.token)
+        localStorage.setItem("user_data", JSON.stringify(resData.user_data))
+    }
+    const handleSend = (e) => {
+        if (e.code === "Enter") {
+            setIsLoading(resData.token);
+            sendData();
+        }
+    }
     return (
         <Box
             sx={{
@@ -30,7 +43,7 @@ function SignUp() {
         >
             <Card
                 sx={{
-                    width: "450px",
+                    width: "420px",
                     display: "flex",
                     alignItems: "center",
                     gap: "10px",
@@ -62,6 +75,7 @@ function SignUp() {
                     </Link>
                 </Text>
                 <FormControl
+                    onKeyDown={(e) => handleSend(e)}
                     sx={{
                         width: "100%",
                         display: "flex",
@@ -71,116 +85,107 @@ function SignUp() {
                     isRequired
                 >
                     <FormLabel htmlFor="name">Foydalanuvchining ismi</FormLabel>
-                    <InputGroup marginTop="-10px">
-                        <Input
-                            type="text"
-                            id="name"
-                            name="first_name"
-                            placeholder="Misol: Biloliddin"
-                        />
-                        <InputRightElement>
-                            <CheckIcon color="green.500" fontSize="sm" />
-                        </InputRightElement>
-                    </InputGroup>
+                    <Input
+                        onChange={(e) =>
+                            setValue({ first_name: e.target.value })
+                        }
+                        type="text"
+                        id="name"
+                        name="first_name"
+                        placeholder="Misol: Biloliddin"
+                        errorBorderColor='red.500'
+                        isInvalid={!!resData.first_name}
+                    />
 
                     <FormLabel htmlFor="surname">
                         Foydalanuvchining familiyasi
                     </FormLabel>
-                    <InputGroup marginTop="-10px">
-                        <Input
-                            type="text"
-                            name="last_name"
-                            id="surname"
-                            placeholder="Misol: Tursunov"
-                        />
-                        <InputRightElement>
-                            <CheckIcon color="green.500" fontSize="sm" />
-                        </InputRightElement>
-                    </InputGroup>
+                    <Input
+                        onChange={(e) =>
+                            setValue({ last_name: e.target.value })
+                        }
+                        type="text"
+                        name="last_name"
+                        id="surname"
+                        placeholder="Misol: Tursunov"
+                        errorBorderColor='red.500'
+                        isInvalid={!!resData.last_name}
+                    />
 
                     <FormLabel htmlFor="username">
                         Foydalanuvchining nomi
                     </FormLabel>
-                    <InputGroup marginTop="-10px">
-                        <Input
-                            type="text"
-                            name="username"
-                            id="username"
-                            placeholder="Misol: biloliddin.tursunov"
-                        />
-                        <InputRightElement>
-                            <CheckIcon color="green.500" fontSize="sm" />
-                        </InputRightElement>
-                    </InputGroup>
+                    <Input
+                        onChange={(e) => setValue({ username: e.target.value })}
+                        type="text"
+                        name="username"
+                        id="username"
+                        placeholder="Misol: biloliddin.tursunov"
+                        errorBorderColor='red.500'
+                        isInvalid={!!resData.username}
+                    />
 
                     <FormLabel htmlFor="password">
                         Foydalanuvchining paroli
                     </FormLabel>
-                    <InputGroup marginTop="-10px">
+                    <InputGroup>
                         <Input
+                            onChange={(e) =>
+                                setValue({ password: e.target.value })
+                            }
                             type={showPassword ? "password" : "text"}
                             name="password"
                             id="password"
                             placeholder="Misol: Biloliddin9979"
+                            errorBorderColor='red.500'
+                            isInvalid={!!resData.password}
                         />
                         <InputRightElement>
-                            {showPasswordBtn && (
-                                <Button
-                                    h="1.75rem"
-                                    size="sm"
-                                    onMouseLeave={() =>
-                                        setShowPasswordBtn(false)
-                                    }
-                                    onClick={() =>
-                                        setShowPassword(!showPassword)
-                                    }
-                                >
-                                    show
-                                </Button>
-                            )}
-                            {!showPasswordBtn && (
-                                <CheckIcon
-                                    color="green.500"
-                                    fontSize="sm"
-                                    onMouseMove={() => setShowPasswordBtn(true)}
-                                />
-                            )}
+                            <IconButton
+                                onClick={() => setShowPassword(!showPassword)}
+                                size="sm"
+                                aria-label="show password button"
+                            >
+                                {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                            </IconButton>
                         </InputRightElement>
                     </InputGroup>
 
                     <FormLabel htmlFor="phone_number">
                         Foydalanuvchining telefon raqami
                     </FormLabel>
-                    <InputGroup marginTop="-10px">
-                        <Input
-                            type="text"
-                            name="phone_number"
-                            id="phone_number"
-                            placeholder="Misol: +999 88 209 99 79"
-                        />
-                        <InputRightElement>
-                            <CheckIcon color="green.500" fontSize="sm" />
-                        </InputRightElement>
-                    </InputGroup>
+                    <Input
+                        onChange={(e) =>
+                            setValue({ phone_number: e.target.value })
+                        }
+                        type="number"
+                        name="phone_number"
+                        id="phone_number"
+                        placeholder="Misol: +999 88 209 99 79"
+                        errorBorderColor='red.500'
+                        isInvalid={!!resData.phone_number}
+                    />
 
                     <FormLabel htmlFor="address">
                         Foydalanuvchining Yashash Manzili
                     </FormLabel>
-                    <InputGroup marginTop="-10px">
-                        <Input
-                            type="text"
-                            name="address"
-                            id="address"
-                            placeholder="Misol: Yozyovon Xonobod"
-                        />
-                        <InputRightElement>
-                            <CheckIcon color="green.500" fontSize="sm" />
-                        </InputRightElement>
-                    </InputGroup>
+                    <Input
+                        onChange={(e) => setValue({ address: e.target.value })}
+                        type="text"
+                        name="address"
+                        id="address"
+                        placeholder="Misol: Yozyovon Xonobod"
+                        errorBorderColor='red.500'
+                        isInvalid={!!resData.address}
+                    />
+
                     <Button
                         marginTop="10px"
                         colorScheme="blue"
-                        onClick={() => setIsLoading(!isLoading)}
+                        onClick={() => {
+                            setIsLoading(resData.token);
+                            sendData();
+                        }}
                     >
                         {isLoading ? <Spinner /> : "Yangi hisob ochish"}
                     </Button>
