@@ -15,6 +15,7 @@ import {
     Text,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import logo from "../assets/react.svg"
 
 function Login() {
     const [showPassword, setShowPassword] = useState(true);
@@ -62,7 +63,7 @@ function Login() {
                 }}
             >
                 <Image
-                    src="/src/assets/react.svg"
+                    src={logo}
                     alt="React logo"
                     width="70px"
                 />

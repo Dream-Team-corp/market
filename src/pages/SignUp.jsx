@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useSignUpStore } from "../store/index.js";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import logo from "../assets/react.svg"
 
 function SignUp() {
     const [showPassword, setShowPassword] = useState(true);
@@ -62,7 +63,7 @@ function SignUp() {
                 }}
             >
                 <Image
-                    src="/src/assets/react.svg"
+                    src={logo}
                     alt="React logo"
                     width="70px"
                 />
