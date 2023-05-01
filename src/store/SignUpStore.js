@@ -1,14 +1,17 @@
 import axios from "axios";
 import { create } from "zustand";
+
+const initialUserData = {
+    first_name: "",
+    last_name: "",
+    username: "",
+    password: "",
+    phone_number: "",
+    address: "",
+};
+
 export const useSignUpStore = create((set, get) => ({
-    userData: {
-        first_name: "",
-        last_name: "",
-        username: "",
-        password: "",
-        phone_number: "",
-        address: "",
-    },
+    userData: initialUserData,
     resData: {},
     setValue: (value) =>
         set((state) => ({ userData: { ...state.userData, ...value } })),

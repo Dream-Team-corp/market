@@ -3,17 +3,21 @@ import { useEffect } from "react";
 
 function Admin() {
     const navigate = useNavigate();
+
     useEffect(() => {
-        if (localStorage.token) {
-            if (JSON.parse(localStorage.user_data).user_role === "admin") {
-                navigate("/admin");
-            } else {
-                navigate("/seller");
-            }
+        const userData = JSON.parse(localStorage.getItem("user_data"));
+        const role = userData?.user_role || null;
+        const token = localStorage.getItem("token");
+
+        if (token && role === "admin") {
+            navigate("/admin");
+        } else if (token && role === "seller") {
+            navigate("/seller");
         } else {
-            navigate("/login")
+            navigate("/login");
         }
     }, [navigate]);
+
     return <h1>lorem</h1>;
 }
 

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import {Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
     Box,
     Button,
@@ -20,18 +20,29 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 function SignUp() {
     const [showPassword, setShowPassword] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const { setValue, sendData, resData } = useSignUpStore((state) => state);
-    if (resData.token && resData.user_data) {
-        localStorage.setItem("token", resData.token)
-        localStorage.setItem("user_data", JSON.stringify(resData.user_data))
-    }
+    useEffect(() => {
+        if (resData.token && resData.user_data) {
+            localStorage.setItem("token", resData.token);
+            localStorage.setItem(
+                "user_data",
+                JSON.stringify(resData.user_data)
+            );
+            if (resData.user_data.user_role === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/seller");
+            }
+        }
+    }, [navigate, resData.token, resData.user_data]);
     const handleSend = (e) => {
         if (e.code === "Enter") {
-            setIsLoading(resData.token);
+            setIsLoading(true);
             sendData();
         }
-    }
+    };
     return (
         <Box
             sx={{
@@ -83,6 +94,7 @@ function SignUp() {
                         gap: "6px",
                     }}
                     isRequired
+                    as="form"
                 >
                     <FormLabel htmlFor="name">Foydalanuvchining ismi</FormLabel>
                     <Input
@@ -93,7 +105,7 @@ function SignUp() {
                         id="name"
                         name="first_name"
                         placeholder="Misol: Biloliddin"
-                        errorBorderColor='red.500'
+                        errorBorderColor="red.500"
                         isInvalid={!!resData.first_name}
                     />
 
@@ -108,7 +120,7 @@ function SignUp() {
                         name="last_name"
                         id="surname"
                         placeholder="Misol: Tursunov"
-                        errorBorderColor='red.500'
+                        errorBorderColor="red.500"
                         isInvalid={!!resData.last_name}
                     />
 
@@ -121,7 +133,7 @@ function SignUp() {
                         name="username"
                         id="username"
                         placeholder="Misol: biloliddin.tursunov"
-                        errorBorderColor='red.500'
+                        errorBorderColor="red.500"
                         isInvalid={!!resData.username}
                     />
 
@@ -137,7 +149,7 @@ function SignUp() {
                             name="password"
                             id="password"
                             placeholder="Misol: Biloliddin9979"
-                            errorBorderColor='red.500'
+                            errorBorderColor="red.500"
                             isInvalid={!!resData.password}
                         />
                         <InputRightElement>
@@ -162,7 +174,7 @@ function SignUp() {
                         name="phone_number"
                         id="phone_number"
                         placeholder="Misol: +999 88 209 99 79"
-                        errorBorderColor='red.500'
+                        errorBorderColor="red.500"
                         isInvalid={!!resData.phone_number}
                     />
 
@@ -175,7 +187,7 @@ function SignUp() {
                         name="address"
                         id="address"
                         placeholder="Misol: Yozyovon Xonobod"
-                        errorBorderColor='red.500'
+                        errorBorderColor="red.500"
                         isInvalid={!!resData.address}
                     />
 
@@ -183,7 +195,7 @@ function SignUp() {
                         marginTop="10px"
                         colorScheme="blue"
                         onClick={() => {
-                            setIsLoading(resData.token);
+                            setIsLoading(true);
                             sendData();
                         }}
                     >

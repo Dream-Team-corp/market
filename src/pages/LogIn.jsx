@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import {useLogInStore} from "../store/";
 import {
     Box,
@@ -19,8 +19,30 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 function Login() {
     const [showPassword, setShowPassword] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const { setValue, sendData, resData } = useLogInStore((state) => state);
+    const { setValue, sendData, resData, userData } = useLogInStore((state) => state);
+    useEffect(() => {
+        if (resData.token && resData.user_data) {
+            localStorage.setItem("token", resData.token);
+            localStorage.setItem(
+                "user_data",
+                JSON.stringify(resData.user_data)
+            );
+            if (resData.user_data.user_role === "admin") {
+                navigate("/admin");
+            } else {
+                navigate("/seller");
+            }
+        }
+    }, [navigate, resData.token, resData.user_data]);
+    console.log(resData, userData)
+    const handleSend = (e) => {
+        if (e.code === "Enter") {
+            setIsLoading(resData.token);
+            sendData();
+        }
+    }
     return (
         <Box
             sx={{
@@ -64,6 +86,7 @@ function Login() {
                     </Link>
                 </Text>
                 <FormControl
+                    onKeyDown={(e) => handleSend(e)}
                     sx={{
                         width: "100%",
                         display: "flex",
@@ -81,6 +104,8 @@ function Login() {
                         name="username"
                         id="username"
                         placeholder="Foydalanuvchining nomi"
+                        errorBorderColor="red.500"
+                        isInvalid={!!resData.password && !!resData.username}
                     />
 
                     <FormLabel htmlFor="password">
@@ -95,6 +120,8 @@ function Login() {
                             name="password"
                             id="password"
                             placeholder="Foydalanuvchining paroli"
+                            errorBorderColor="red.500"
+                            isInvalid={!!resData.password}
                         />
                         <InputRightElement>
                             <IconButton
